@@ -1,0 +1,12 @@
+.avatar {
+  height: 3em;
+  width: 3em;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: black;
+  }
+}
