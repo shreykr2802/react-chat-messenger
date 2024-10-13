@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useApp } from "../../../context/AppContext";
 import {
   getAllMessagesBetweenFriends,
@@ -18,6 +18,7 @@ export const Layout = () => {
   const [messages, setMessages] = useState<RecordModel[]>([]);
   const { loggedInUser, selectedFriend } = useApp();
   const [newMessage, setNewMessage] = useState<string>("");
+  const ref = useRef<HTMLDivElement>(null);
 
   const getMessages = useCallback(async () => {
     setMessages(
@@ -30,13 +31,24 @@ export const Layout = () => {
   }, [getMessages]);
 
   const saveMessage = async () => {
-    await saveMessageBetweenFriends(
-      loggedInUser.id,
-      selectedFriend.id,
-      newMessage
-    );
-    setNewMessage("");
+    if (newMessage) {
+      await saveMessageBetweenFriends(
+        loggedInUser.id,
+        selectedFriend.id,
+        newMessage
+      );
+      setNewMessage("");
+    }
   };
+
+  useEffect(
+    () =>
+      ref.current?.scrollTo({
+        top: ref.current?.scrollHeight + 80,
+        behavior: "smooth",
+      }),
+    [messages]
+  );
 
   useEffect(() => {
     pb.realtime.subscribe(
@@ -44,19 +56,20 @@ export const Layout = () => {
       function (e) {
         if (
           e.record.expand.from_user.id === loggedInUser.id ||
-          e.record.to_user.id === loggedInUser.id
-        )
+          e.record.expand.to_user.id === loggedInUser.id
+        ) {
           setMessages((prevMessage) => [...prevMessage, e.record]);
+        }
       },
       { expand: "from_user, to_user" }
     );
     return () => {
       pb.realtime.unsubscribe();
     };
-  }, [loggedInUser.id]);
+  });
 
   return (
-    <div className="layout">
+    <div className="layout" ref={ref}>
       {messages.map((message) => {
         return (
           <div
@@ -68,7 +81,9 @@ export const Layout = () => {
             }
           >
             <Message text={message.text} />
-            <span className="date-time">{message.created}</span>
+            <span className="date-time">{`${
+              message.created.split(" ")[0]
+            } ${message.created.split(" ")[1].slice(0, 5)}`}</span>
           </div>
         );
       })}
