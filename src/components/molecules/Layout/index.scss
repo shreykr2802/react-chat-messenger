@@ -1,5 +1,53 @@
 .layout {
-  height: 100%;
-  width: 100%;
-  background-color: bisque;
+  height: 80%;
+  width: 85%;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  flex-direction: column;
+  position: fixed;
+  top: 6em;
+  left: 6em;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chat-screen {
+    align-self: baseline;
+  }
+
+  .date-time {
+    font-size: 0.5em;
+    color: black;
+  }
+
+  .send-message {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 80%;
+  }
+
+  .left {
+    align-self: flex-start;
+    .date-time {
+      float: left;
+      margin-left: 1em;
+    }
+    .message {
+      background-color: #3f8eb9;
+    }
+  }
+
+  .right {
+    align-self: flex-end;
+    .date-time {
+      float: right;
+      margin-right: 1em;
+    }
+  }
 }

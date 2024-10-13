@@ -1,0 +1,19 @@
+.input {
+  --width: 10em;
+  --height: 2em;
+  --box-border: 1px solid black;
+  --border-radius: 8px;
+  width: var(--width);
+  height: var(--height);
+  border: var(--box-border);
+  border-radius: var(--border-radius);
+  background-color: white;
+  margin: 1em;
+  padding: 1em;
+  color: black;
+  outline: none;
+
+  &.newMessage {
+    --width: 80%;
+  }
+}

@@ -14,7 +14,7 @@ export const getAllMessagesBetweenFriends = async (
   friendUser: string
 ) => {
   return pb.collection("messages").getFullList({
-    filter: `(from_user.username = "${loggedInUser}" || to_user.username =  "${loggedInUser}" || from_user.username = "${friendUser}" || to_user.username =  "${friendUser}")`,
+    filter: `((from_user.username = "${loggedInUser}" && to_user.username =  "${friendUser}") || (from_user.username = "${friendUser}" && to_user.username =  "${loggedInUser}"))`,
     sort: "created",
     expand: "from_user, to_user",
   });

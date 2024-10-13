@@ -1,3 +1,18 @@
 .message {
-    
+  min-width: 15em;
+  max-width: 20em;
+  min-height: 2em;
+  box-shadow: 0 0 4px 4px rgb(207, 207, 207);
+  border-radius: 1em;
+  background-color: #48a3e3;
+  margin: 0.25em;
+  padding: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
 }

@@ -1,5 +1,16 @@
-import "./index.scss"
+import { FC } from "react";
+import "./index.scss";
 
-export const Button = () => {
-    return <button className="button">Button</button>
+interface IProp {
+  label: string;
+  onClick: () => void;
+  buttonType: "send";
 }
+
+export const Button: FC<IProp> = ({ label, onClick, buttonType }) => {
+  return (
+    <button className={`button ${buttonType}`} onClick={onClick}>
+      {label}
+    </button>
+  );
+};
