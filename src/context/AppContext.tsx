@@ -6,20 +6,35 @@ import {
   useState,
 } from "react";
 
+export type User = {
+  id: string;
+  username: string;
+};
+
+interface IProp {
+  loggedInUser: User;
+}
+
 interface IAppContext {
-  loggedInUser: string;
-  selectedFriend: string;
-  setSelectedFriend: (value: string) => void;
+  loggedInUser: User;
+  selectedFriend: User;
+  setSelectedFriend: (value: User) => void;
 }
 
 const AppContext = createContext<IAppContext>(undefined!);
 
-export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [selectedFriend, setSelectedFriend] = useState<string>("");
+export const AppProvider: FC<PropsWithChildren<IProp>> = ({
+  children,
+  loggedInUser,
+}) => {
+  const [selectedFriend, setSelectedFriend] = useState<User>({
+    id: "",
+    username: "",
+  });
   return (
     <AppContext.Provider
       value={{
-        loggedInUser: "test1",
+        loggedInUser,
         selectedFriend,
         setSelectedFriend,
       }}

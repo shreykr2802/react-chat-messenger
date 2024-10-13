@@ -9,4 +9,8 @@
   &:hover {
     background-color: black;
   }
+
+  &.active {
+    background-color: rgb(213, 58, 58);
+  }
 }

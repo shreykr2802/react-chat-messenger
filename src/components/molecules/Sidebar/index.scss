@@ -1,21 +1,29 @@
 .aside {
   position: fixed;
   left: 0;
-  top: 0;
+  top: 4em;
   background-color: #4e55df;
-  height: 100%;
+  height: calc(100% - 4em);
   width: 5em;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   gap: 2em;
   flex-direction: column;
+  z-index: 10;
 
-  .friend {
-    border: 0;
-    outline: none;
-    margin: 0;
-    padding: 0;
-    background-color: transparent;
+  .friends {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+    flex-direction: column;
+    .friend {
+      border: 0;
+      outline: none;
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+    }
   }
 }
