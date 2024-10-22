@@ -16,8 +16,9 @@ const pb = new PocketBase(pocketBaseUrl);
 
 export const Layout = () => {
   const [messages, setMessages] = useState<RecordModel[]>([]);
+  const [loading, setLoading] = useState(false);
   const { loggedInUser, selectedFriend } = useApp();
-  const [newMessage, setNewMessage] = useState<string>("");
+  const [newMessage, setNewMessage] = useState<Record<string, string>>({});
   const ref = useRef<HTMLDivElement>(null);
 
   const getMessages = useCallback(async () => {
@@ -27,17 +28,21 @@ export const Layout = () => {
   }, [loggedInUser, selectedFriend]);
 
   useEffect(() => {
-    getMessages();
+    setLoading(true);
+    getMessages().then(() => setLoading(false));
   }, [getMessages]);
 
   const saveMessage = async () => {
-    if (newMessage) {
+    if (newMessage[selectedFriend.id]) {
       await saveMessageBetweenFriends(
         loggedInUser.id,
         selectedFriend.id,
-        newMessage
+        newMessage[selectedFriend.id]
       );
-      setNewMessage("");
+      setNewMessage((prevMessages) => ({
+        ...prevMessages,
+        [selectedFriend.id]: "",
+      }));
     }
   };
 
@@ -68,7 +73,19 @@ export const Layout = () => {
     };
   });
 
-  return (
+  const getFormattedDate = (date: string) => {
+    const formattedDate = new Date(date);
+    return (
+      <>
+        {formattedDate.toLocaleDateString()}{" "}
+        {formattedDate.toLocaleTimeString()}
+      </>
+    );
+  };
+
+  return loading ? (
+    <span>Loading....</span>
+  ) : (
     <div className="layout" ref={ref}>
       {messages.map((message) => {
         return (
@@ -81,9 +98,9 @@ export const Layout = () => {
             }
           >
             <Message text={message.text} />
-            <span className="date-time">{`${
-              message.created.split(" ")[0]
-            } ${message.created.split(" ")[1].slice(0, 5)}`}</span>
+            <span className="date-time">
+              {getFormattedDate(message.created)}
+            </span>
           </div>
         );
       })}
@@ -92,8 +109,13 @@ export const Layout = () => {
           type="text"
           inputType="newMessage"
           placeholder="type your message here..."
-          onChange={(value) => setNewMessage(value)}
-          value={newMessage}
+          onChange={(value) =>
+            setNewMessage((prevMessages) => ({
+              ...prevMessages,
+              [selectedFriend.id]: value,
+            }))
+          }
+          value={newMessage[selectedFriend.id] ?? ""}
         />
         <Button label="Send" onClick={saveMessage} buttonType="send" />
       </div>
